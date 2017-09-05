@@ -1,6 +1,13 @@
-Установливаем пакет шрифтов - https://packages.debian.org/sid/all/ttf-mscorefonts-installer/download
-Добавляем репозиторий - add-apt-repository ppa:no1wantdthisname/ppa
+#Установливаем пакет шрифтов
+https://packages.debian.org/sid/all/ttf-mscorefonts-installer/download  
+
+#Добавляем репозиторий
+add-apt-repository ppa:no1wantdthisname/ppa                             
 apt update
 apt upgrade
-Установка программы для рендеринга - apt-get install fontconfig-infinality
-Выбор типа рендеринга - bash /etc/fonts/infinality/infctl.sh setstyle
+
+#Установка программы для рендеринга
+apt-get install fontconfig-infinality   
+
+#Выбор типа рендеринга
+bash /etc/fonts/infinality/infctl.sh setstyle   
