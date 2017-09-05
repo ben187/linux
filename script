@@ -1,0 +1,32 @@
+#!/bin/bash
+
+release=$(cat /etc/redhat-release | grep -o [0-9][.,][0-9] | head -c 1)
+echo "$release"
+if [ "$release" = "6" ]
+        then echo "this 6"
+        fi
+if [ "$release" = "7" ]
+        then echo "this 7"
+        fi
+#if [ "$var1" = "yes" ]
+#        then echo "nameserver 8.8.4.4
+#nameserver 8.8.8.8"> /etc/resolv.conf
+#        var1=done
+#fi
+#
+#sleep 2
+
+#Forward ip
+#sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
+
+#sleep 2
+#
+#if [ "$var1" = "done" ]
+#        then echo "DNS -> OK"
+#        else echo "DNS -> NO"
+#fi
+#
+#if [ "$var2" = "done" ]
+#        then echo "iptables -> OK"
+#        else echo "iptables -> NO"
+#fi
