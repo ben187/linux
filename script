@@ -1,32 +1,84 @@
 #!/bin/bash
+# Author: ben187
 
-release=$(cat /etc/redhat-release | grep -o [0-9][.,][0-9] | head -c 1)
-echo "$release"
-if [ "$release" = "6" ]
-        then echo "this 6"
+SECURE_SSHD=n
+SSHD_PORT=10022
+SSHD_USERS='root'
+SSHD_ROOT_LOGIN=y
+
+CONFIG_DNS=n
+CONFIG_IPTABLES=n
+CONFIG_IPFORWARD=n
+
+INSTALL_HTOP=y
+INSTALL_WEBMIN=y
+INSTALL_NMAP=y
+INSTALL_NETUTILS=n
+
+yum -y update
+
+# Secure sshd
+if [[ "$SECURE_SSHD" = [yY] ]]; then
+        echo "Securing SSHD"
+        cat >> /etc/ssh/sshd_config <<EOF
+
+Port $SSHD_PORT
+AllowUsers $SSHD_USERS
+EOF
+fi
+
+if [[ "$SSHD_ROOT_LOGIN" = [nN] ]]; then
+        sed -i 's/PermitRootLogin yes/#PermitRootLogin yes/' /etc/ssh/sshd_config
         fi
-if [ "$release" = "7" ]
-        then echo "this 7"
+
+# Config
+if [[ "$CONFIG_DNS" = [yY] ]] ; then
+        echo "nameserver 8.8.4.4
+nameserver 8.8.8.8"> /etc/resolv.conf
         fi
-#if [ "$var1" = "yes" ]
-#        then echo "nameserver 8.8.4.4
-#nameserver 8.8.8.8"> /etc/resolv.conf
-#        var1=done
-#fi
-#
-#sleep 2
 
-#Forward ip
-#sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
+if [[ "$CONFIG_IPFORWARD" = [yY] ]] ; then
+        sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
+        fi
 
-#sleep 2
-#
-#if [ "$var1" = "done" ]
-#        then echo "DNS -> OK"
-#        else echo "DNS -> NO"
-#fi
-#
-#if [ "$var2" = "done" ]
-#        then echo "iptables -> OK"
-#        else echo "iptables -> NO"
-#fi
+if [[ "$CONFIG_IPTABLES" = [yY] ]] ; then
+        cat >> /etc/sysconfig/iptables <EOF
+*filter
+:FORWARD DROP [0:0]
+:INPUT DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+
+-A INPUT -i lo -j ACCEPT
+-A INPUT -m conntrack -j DROP  --ctstate INVALID
+-A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+
+-A INPUT -p tcp -m state -m tcp --dport $SSHD_PORT --state NEW -j ACCEPT
+
+COMMIT
+        fi
+
+# Install htop
+if [[ "$INSTALL_HTOP" = [yY] ]] ; then
+        yum -y install htop
+        fi
+
+# Install Webmin
+if [[ "$INSTALL_WEBMIN" = [yY] ]] ; then
+        yum -y install webmin
+        fi
+
+# Install nmap
+if [[ "$INSTALL_NMAP" = [yY] ]] ; then
+        yum -y install nmap
+        fi
+
+# Restarting services
+
+if [[ "$SECURE_SSHD" = [yY] ]]; then
+        service sshd restart
+fi
+
+if [[ "$CONFIG_IPTABLES" = [yY] ]]; then
+        service iptables restart
+fi
