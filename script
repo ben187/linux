@@ -15,6 +15,7 @@ INSTALL_WEBMIN=y
 INSTALL_NMAP=y
 INSTALL_NETUTILS=n
 
+yum install -y epel-release
 yum -y update
 
 # Secure sshd
@@ -42,21 +43,7 @@ if [[ "$CONFIG_IPFORWARD" = [yY] ]] ; then
         fi
 
 if [[ "$CONFIG_IPTABLES" = [yY] ]] ; then
-        cat >> /etc/sysconfig/iptables <EOF
-*filter
-:FORWARD DROP [0:0]
-:INPUT DROP [0:0]
-:OUTPUT ACCEPT [0:0]
-
--A INPUT -i lo -j ACCEPT
--A INPUT -m conntrack -j DROP  --ctstate INVALID
--A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
--A INPUT -p icmp -j ACCEPT
-
--A INPUT -p tcp -m state -m tcp --dport $SSHD_PORT --state NEW -j ACCEPT
-
-COMMIT
-EOF
+        cat /iptables > /etc/sysconfig/iptables
         fi
 
 # Install htop
