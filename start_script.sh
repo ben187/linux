@@ -9,12 +9,14 @@ SSHD_ROOT_LOGIN=y
 CONFIG_DNS=y
 CONFIG_IPTABLES=y
 CONFIG_IPFORWARD=y
+CONFIG_BASHRC=y
 
 INSTALL_HTOP=y
 INSTALL_NMAP=y
 INSTALL_NETUTILS=y
 INSTALL_WGET=y
 INSTALL_GIT=y
+INSTALL_MAN_PAGES=y
 REBOOT=y
 
 yum install -y epel-release
@@ -46,7 +48,13 @@ if [[ "$CONFIG_IPTABLES" = [yY] ]] ; then
         > /etc/sysconfig/iptables
         cat /iptables > /etc/sysconfig/iptables
         fi
+if [[ "$CONFIG_BASHRC" = [yY] ]]; then
+        cp /root/.bashrc /root/.bashrc.backup
+        cat >> /root/.bashrc <<EOF
 
+PS1='\[\e[1;30m\]\t \e[m\]\e[1;34m[\u@\h]\e[m\] \[\e[1;97m\]\W\e[m\] \n\$ '
+EOF
+fi
 if [[ "$INSTALL_HTOP" = [yY] ]] ; then
         yum -y install htop
         fi
@@ -65,6 +73,9 @@ if [[ "$INSTALL_WGET" = [yY] ]] ; then
 if [[ "$INSTALL_GIT" = [yY] ]] ; then
         yum -y install git
         fi
+if [[ "$INSTALL_MAN_PAGES" = [yY] ]] ; then
+        yum -y install man
+        fi        
 
 if [[ "$SECURE_SSHD" = [yY] ]]; then
         service sshd restart
