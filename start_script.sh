@@ -73,7 +73,7 @@ fi
 if [[ "$CONFIG_IPTABLES" = [yY] ]]; then
         service iptables restart
         fi
-
+ 
 if [[ "$REBOOT" = [yY] ]] ; then
         shutdown -r now
         fi
