@@ -6,7 +6,7 @@
 -A INPUT -i lo -j ACCEPT
 
 -A INPUT -m conntrack --ctstate INVALID -j DROP
--A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 
 -A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
 
