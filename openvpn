@@ -68,3 +68,28 @@ key user1.key
 persist-key
 persist-tun
 comp-lzo
+
+##### IPTABLES
+*nat
+-A POSTROUTING -s 10.1.1.0/24 -o eth0 -j MASQUERADE
+COMMIT
+
+*filter
+:INPUT DROP
+:FORWARD DROP
+:OUTPUT ACCEPT
+
+-A INPUT -i lo -j ACCEPT
+
+-A INPUT -m conntrack --ctstate INVALID -j DROP
+-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -i eth0 -p udp --dport 1194 -j ACCEPT
+
+
+-A FORWARD -i tun0 -o eth0 -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+-A FORWARD -i eth0 -o tun0 -m state --state ESTABLISHED,RELATED -j ACCEPT
+COMMIT
+
+
