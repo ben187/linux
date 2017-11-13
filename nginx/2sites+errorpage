@@ -1,0 +1,28 @@
+user nginx;
+worker_processes 4;
+pid     /run/nginx.pid;
+error_log       /var/log/nginx/error.log;
+events {
+        worker_connections 32;
+}
+http {
+        access_log      /var/log/nginx/access.log;
+        server {
+                listen          80 default_server;
+                server_name     a.com;
+                location / {
+                        root /data/www/a.com;
+                }
+        }
+        server {
+                listen          80;
+                server_name     b.com;
+                location / {
+                        root /data/www/b.com;
+                }
+                error_page 404 /404.html;
+                location = /404.html {
+                        root /data/www/errordocs;
+                }
+        }
+}
