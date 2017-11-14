@@ -1,16 +1,30 @@
 user nginx;
 worker_processes 4;
-pid             /run/nginx.pid;
+pid     /run/nginx.pid;
 error_log       /var/log/nginx/error.log;
 events {
-        worker_connections 32;
+        worker_connections 1024;
+        multi_accept on;
 }
 http {
         access_log      /var/log/nginx/access.log;
-        sendfile on;
-        keepalive_timeout 15;
-        charset utf-8;
-        
+
+        sendfile                on;
+        tcp_nopush              on;
+        tcp_nodelay             on;
+
+        reset_timedout_connection on;
+        keepalive_timeout       120;
+        keepalive_requests      1000;
+
+        server_tokens           off;
+
+        gzip                    on;
+        gzip_disable            "msie6";
+        gzip_comp_level         5;
+        gzip_min_length         128;
+        gzip_types text/plain text/css text/xml text/javascript application/x-javascript application/xml;
+
         server {
                 listen          80 default_server;
                 server_name     a.com;
@@ -22,7 +36,9 @@ http {
                 location = /404.html {
                         root /data/www/errordocs;
                 }
+
         }
+
         server {
                 listen          80;
                 server_name     b.com;
@@ -32,13 +48,12 @@ http {
                         index index.html index.php;
                         root /data/www/b.com;
                 }
-
                 location ~ \.php$ {
                         root /data/www/b.com;
                         fastcgi_pass  localhost:9000;
-                        include       fastcgi_params;
                         fastcgi_param SCRIPT_FILENAME
                                 $document_root$fastcgi_script_name;
+                        include       fastcgi_params;
                 }
         }
 }
