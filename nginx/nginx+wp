@@ -1,0 +1,57 @@
+user nginx;
+worker_processes 4;
+pid     /run/nginx.pid;
+error_log       /var/log/nginx/error.log;
+events {
+        worker_connections 1024;
+        multi_accept on;
+}
+http {
+        access_log      /var/log/nginx/access.log;
+
+        sendfile                on;
+        tcp_nopush              on;
+        tcp_nodelay             on;
+
+        reset_timedout_connection on;
+        keepalive_timeout       120;
+        keepalive_requests      1000;
+
+        server_tokens           off;
+
+        gzip                    on;
+        gzip_disable            "msie6";
+        gzip_comp_level         5;
+        gzip_min_length         128;
+        gzip_types text/plain text/css text/xml text/javascript application/x-javascript applicati                                                                                                                                           on/xml;
+
+        server {
+                listen          80;
+                server_name     c.com;
+
+                access_log /var/log/nginx/c.com/access.log;
+                error_log /var/log/nginx/c.com/error.log;
+
+                location / {
+                        root /data/www/c.com;
+                        index index.php index.html index.htm;
+                        include /etc/nginx/mime.types;
+
+                        if (-f $request_filename) {
+                        expires 30d;
+                        break;
+                        }
+                        if (!-e $request_filename) {
+                        rewrite ^(.+)$ /index.php?q=$1 last;
+                        }
+                }
+
+                location ~ .php$ {
+                        fastcgi_pass   localhost:9000;
+                        fastcgi_index  index.php;
+                        fastcgi_param  SCRIPT_FILENAME /data/www/c.com$fastcgi_script_name;
+                        fastcgi_param PATH_INFO         $fastcgi_script_name;
+                        include /etc/nginx/fastcgi_params;
+                }
+        }
+}
