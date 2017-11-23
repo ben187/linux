@@ -1,0 +1,13 @@
+https://github.com/poststatus/wptest
+
+Installation via WordPress Admin
+
+1. Download the data from the repository.
+2. Unzip the download on your computer.
+3. Launch your WordPress site.
+4. Navigate to Tools > Import in the WordPress admin.
+5. Click on WordPress and install the WordPress Importer plugin, if it's not already installed, and click Activate Plugin & Run Importer after the installation completes.
+6. Choose the wptest.xml file you extracted from the zip in Step 2 and click Upload file and import.
+7. On the next screen, do not change or reassign anything about the authors and make sure you check the Download and import file attachments box before you click Submit.
+8. Let the import process run until complete. Do not close the browser tab / window or navigate away from page while importing. You should see an All done. Have fun! message when the import is complete.
+9. Happy testing! See Usage section for more details.
