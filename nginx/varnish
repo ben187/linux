@@ -1,0 +1,12 @@
+https://www.tecmint.com/install-varnish-cache-for-nginx-on-centos-7/
+
+# yum install varnish 
+    /etc/varnish/varnish.params – this is the varnish environment configuration file.
+    /etc/varnish/default.vcl – this is the main varnish configuration file, it is written using vanish configuration language(VCL).
+    /etc/varnish/secret – varnish secret file.  
+
+vi /etc/nginx/nginx.conf
+    listen 8080;
+    
+    
+    
