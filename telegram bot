@@ -1,0 +1,9 @@
+Find -> BotFather
+/newbot
+
+Find NewBotName
+/start
+hi
+
+https://api.telegram.org/bot<TOKEN>/getUpdates
+https://api.telegram.org/bot<TOKEN>/sendMessage?chat_id=<CHAT_ID>&text=Hello%20World
