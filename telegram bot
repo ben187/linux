@@ -17,3 +17,4 @@ Send message from Linux:
 curl -i -X GET https://api.telegram.org/bot<TOKEN>/sendMessage -d text="hello" -d chat_id=<CHAT_ID>
 
 
+via - https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69
