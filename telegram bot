@@ -1,3 +1,4 @@
+##### INSTRUCTION ######################
 Send a message to @BotFather
 /newbot
 and answer the questions
@@ -17,4 +18,17 @@ Send message from Linux:
 curl -i -X GET https://api.telegram.org/bot<TOKEN>/sendMessage -d text="hello" -d chat_id=<CHAT_ID>
 
 
+##### SCRIPT ##########################
+#!/bin/bash
+# Author: ben187
+
+TOKEN=11111111111111111111111111111
+CHAT_ID=111111111
+URL=https://api.telegram.org/bot$TOKEN/sendMessage
+
+TEXT='hello, its script'
+
+curl -i -s -X GET $URL -d text="$TEXT" -d chat_id=$CHAT_ID
+
+############################################
 via - https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69
