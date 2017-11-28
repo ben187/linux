@@ -1,9 +1,16 @@
-Find -> BotFather
+Send a message to @BotFather
 /newbot
+and answer the questions
 
-Find NewBotName
+Talking to your bot
 /start
-hi
+and send a random message 
 
+In browser:
 https://api.telegram.org/bot<TOKEN>/getUpdates
 https://api.telegram.org/bot<TOKEN>/sendMessage?chat_id=<CHAT_ID>&text=Hello%20World
+
+Send message from Linux:
+curl -i -X GET https://api.telegram.org/bot<TOKEN>/sendMessage -d text="hello" -d chat_id=<CHAT_ID>
+
+
