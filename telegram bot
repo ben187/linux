@@ -30,5 +30,24 @@ TEXT='hello, its script'
 
 curl -i -s -X GET $URL -d text="$TEXT" -d chat_id=$CHAT_ID
 
-############################################
+##### EXAMPLE SCRIPT ######################
+
+#!/bin/bash
+
+ADDRESS="192.168.0.1"
+TOKEN=11111111111111111111111111111
+CHAT_ID=111111111
+URL=https://api.telegram.org/bot$TOKEN/sendMessage
+TEXT='server down'
+
+if ping -c 5 -s 5 -W 5 $ADDRESS
+then
+echo "server ok"
+else
+curl -i -s -X GET $URL -d text="$TEXT" -d chat_id=$CHAT_ID
+fi
+
+###################################################
+
+
 via - https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69
