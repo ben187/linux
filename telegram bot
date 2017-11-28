@@ -50,22 +50,25 @@ fi
 ###################################################
 #!/bin/bash
 
-TOKEN=491645802:AAEdWxxqA4Sj2DAxM0sNFEWFggM4V0zg1vM
-CHAT_ID=432308517
+TOKEN=11111111111111111111111111111
+CHAT_ID=111111111
 URL=https://api.telegram.org/bot$TOKEN/sendMessage
-TEXT='nginx down'
 
+NGINX='nginx on 192.168.100.227 is down'
+PHP_FPM='php-fpm on 192.168.100.227 is down'
 ACTIVE="active"
-STATUS=`service nginx status | grep Active:`
-STATUS1=`echo $STATUS |grep Active: | cut -d ' ' -f 2- |awk '{print $1}'`
 
-if [[ "$STATUS1" != "$ACTIVE" ]]; then
+STATUS_NGINX=`service nginx status | grep Active:`
+STATUS_NGINX1=`echo $STATUS_NGINX |grep Active: | cut -d ' ' -f 2- |awk '{print $1}'`
+if [[ "$STATUS_NGINX1" != "$ACTIVE" ]]; then
+curl -i -s -X GET $URL -d text="$NGINX" -d chat_id=$CHAT_ID
+fi
 
-curl -i -s -X GET $URL -d text="$TEXT" -d chat_id=$CHAT_ID
-
+STATUS_PHP_FPM=`service php-fpm status | grep Active:`
+STATUS_PHP_FPM1=`echo $STATUS_PHP_FPM |grep Active: | cut -d ' ' -f 2- |awk '{print $1}'`
+if [[ "$STATUS_PHP_FPM1" != "$ACTIVE" ]]; then
+curl -i -s -X GET $URL -d text="$PHP_FPM" -d chat_id=$CHAT_ID
 fi
 
 #####################################################
-
-
 via - https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69
