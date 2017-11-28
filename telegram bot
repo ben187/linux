@@ -48,6 +48,24 @@ curl -i -s -X GET $URL -d text="$TEXT" -d chat_id=$CHAT_ID
 fi
 
 ###################################################
+#!/bin/bash
+
+TOKEN=491645802:AAEdWxxqA4Sj2DAxM0sNFEWFggM4V0zg1vM
+CHAT_ID=432308517
+URL=https://api.telegram.org/bot$TOKEN/sendMessage
+TEXT='nginx down'
+
+ACTIVE="active"
+STATUS=`service nginx status | grep Active:`
+STATUS1=`echo $STATUS |grep Active: | cut -d ' ' -f 2- |awk '{print $1}'`
+
+if [[ "$STATUS1" != "$ACTIVE" ]]; then
+
+curl -i -s -X GET $URL -d text="$TEXT" -d chat_id=$CHAT_ID
+
+fi
+
+#####################################################
 
 
 via - https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69
