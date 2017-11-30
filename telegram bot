@@ -71,4 +71,21 @@ curl -i -s -X GET $URL -d text="$PHP_FPM" -d chat_id=$CHAT_ID
 fi
 
 #####################################################
+if ping -c 3 -s 5 -W 5 $IP_RICH | grep ttl;
+then
+COUNT_RICH=0
+echo "$COUNT_RICH"
+else
+COUNT_RICH=$(($COUNT_RICH+1))
+echo "$COUNT_RICH"
+fi
+
+if [[ $COUNT_RICH -eq 1 ]];
+then
+curl -i -s -X GET $URL -d text="$RICH" -d chat_id=$CHAT_ID
+else
+> /dev/null
+fi
+
+#####################################################
 via - https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69
