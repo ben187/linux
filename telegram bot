@@ -122,6 +122,18 @@ WHL=$(( $WHL + 1 ))
 echo  "$WHL"
 sleep 5
 done
+####################################################
+UPTIME=`uptime`
+LOAD_AVERAGE=`uptime | grep -o .[0-9].[0-9][0-9] | head -n3 | tail -n1 | cut -c -2`
+WARNING=1
+
+if [[ $LOAD_AVERAGE -ge $WARNING ]];
+then
+curl -i -s -X GET $URL -d text="VPS $UPTIME" -d chat_id=$CHAT_ID
+else
+> /dev/null
+fi
+
 
 ####################################################
 via - https://unnikked.ga/getting-started-with-telegram-bots-9e467d922d69
