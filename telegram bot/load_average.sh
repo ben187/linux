@@ -5,13 +5,13 @@ TOKEN=111111111111111111111111111111111111
 CHAT_ID=1111111111
 URL=https://api.telegram.org/bot$TOKEN/sendMessage
 
-UPTIME=`uptime`
 WARNING=1
 WHL=0
 COUNT=0
 
 while [[ $WHL -lt 11 ]]; do
 
+UPTIME=`uptime`
 LOAD_AVERAGE=`uptime | grep -o .[0-9].[0-9][0-9] | head -n3 | tail -n1 | cut -c -2`
 
 if [[ $LOAD_AVERAGE -ge $WARNING ]];
