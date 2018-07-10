@@ -1,0 +1,12 @@
+#!/bin/bash
+
+mkdir test
+cd test
+
+for (( i=1; i <= 30; i++ ))
+do
+mkdir $i
+echo 123 > $i.txt
+cd $i
+
+done
