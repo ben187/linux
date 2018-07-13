@@ -1,0 +1,32 @@
+dd if=/dev/zero of=disk1 bs=512 count=1000000
+dd if=/dev/zero of=disk2 bs=512 count=1000000
+
+losetup /dev/loop1 disk1
+losetup /dev/loop2 disk2
+
+Создаем разделы fdisk
+
+kpartx  -av disk1
+kpartx  -av disk2
+
+(EXAMPLE
+To mount all the partitions in a raw disk image:
+kpartx -av disk.img
+This will output lines such as:
+
+loop3p1 : 0 20964762 /dev/loop3 63
+The loop3p1 is the name of a device file under /dev/mapper which you can use to access the partition, for example to fsck it:
+
+fsck /dev/mapper/loop3p1
+When you're done, you need to remove the devices:
+
+kpartx -d disk.img)
+
+mdadm --create --verbose /dev/md0 --level=1 --raid-devices=2 /dev/mapper/loop0p1 /dev/mapper/loop2p1
+
+cat /proc/mdstat
+
+mkfs.ext4 /dev/md0
+
+mdadm -S /dev/md0
+
