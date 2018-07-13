@@ -30,3 +30,4 @@ mkfs.ext4 /dev/md0
 
 mdadm -S /dev/md0
 
+losetup -d /dev/loop0
