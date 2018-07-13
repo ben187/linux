@@ -1,0 +1,3 @@
+socks5 proxy:
+ssh -D 8080 root@194.87.236.122
+
