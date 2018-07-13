@@ -1,0 +1,30 @@
+yum install munin
+yum install munin-nod
+
+vi /etc/munin/munin.conf
+  [localhost.localdomain]
+  
+vi /etc/munin/munin-node.conf
+  host_name localhost.localdomain
+  
+service munin-node restart
+
+for apache:
+<Location /munin>
+    AuthType Basic
+    AuthName "Munin Statistics"
+    AuthUserFile /etc/munin/.passwd
+    Require valid-user
+</Location>
+
+for nginx:
+location /munin {
+    alias /var/www/munin;
+    autoindex on;
+    auth_basic "Munin Statistics";
+    auth_basic_user_file /etc/munin/.passwd;
+}
+
+htpasswd -c /etc/munin/.passwd user
+
+via https://community.vscale.io/hc/ru/community/posts/209438565-%D0%A3%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B8-%D0%BF%D0%B5%D1%80%D0%B2%D0%B8%D1%87%D0%BD%D0%B0%D1%8F-%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-Munin-%D0%BD%D0%B0-Ubuntu-16-04
