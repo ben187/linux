@@ -4,3 +4,5 @@ mysql ИМЯ_БАЗЫ -uИМЯ_ПОЛЬЗОВАТЕЛЯ -pПАРОЛЬ < dump.sq
 mysql -uИМЯ_ПОЛЬЗОВАТЕЛЯ -pПАРОЛЬ
 use ИМЯ_БАЗЫ;
 \. /путь/к/dump.sql
+
+tar -xvf archive.tar
