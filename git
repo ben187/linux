@@ -1,0 +1,8 @@
+mkdir git
+git clone https://github.com/user/topic
+
+git pull
+git status
+git add -A
+git commit -m "message"
+git push origin
