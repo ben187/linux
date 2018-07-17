@@ -1,3 +1,4 @@
+.
 wget -r -l 30 ftp://user:password@127.0.0.1/test
 
 mysql ИМЯ_БАЗЫ -uИМЯ_ПОЛЬЗОВАТЕЛЯ -pПАРОЛЬ < dump.sql
