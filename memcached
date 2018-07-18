@@ -6,3 +6,12 @@ MAXCONN="1024"
 CACHESIZE="64"
 OPTIONS="-l 127.0.0.1"
 logfile /var/log/memcached.log
+
+Отключение протокола UDP:
+OPTIONS="-l 127.0.0.1 -U 0"
+
+systemctl restart memcached
+
+netstat -plunt
+memcached-tool 127.0.0.1:11211 stats
+ps aux | grep memcached
