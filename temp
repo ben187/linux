@@ -1,1 +1,11 @@
 https://github.com/major/MySQLTuner-perl
+
+Apache gzip:
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml application/xml application/xhtml+xml text/javascript text/css application/x-javascript
+  <ifmodule mod_gzip.c>
+  mod_gzip_on Yes
+  mod_gzip_item_include file \.js$
+  mod_gzip_item_include file \.css$ </IfModule>
+</IfModule>
