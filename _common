@@ -1,0 +1,43 @@
+.
+wget -r -l 30 ftp://user:password@127.0.0.1/test
+
+mysql ИМЯ_БАЗЫ -uИМЯ_ПОЛЬЗОВАТЕЛЯ -pПАРОЛЬ < dump.sql
+mysql -uИМЯ_ПОЛЬЗОВАТЕЛЯ -pПАРОЛЬ
+use ИМЯ_БАЗЫ;
+\. /путь/к/dump.sql
+____________________
+tar:
+Создание архива без сжатия:
+tar -cf filename.tar file1 file2 fileN
+
+Создание архива с сжатием:
+tar -cvzf filename.tar.gz dir_name
+
+Распаковка:
+tar -xvf filename.tar
+tar -xvf filename.tar.bz2 -C /path/to/folder
+
+Просмотр содержимого без распаковки:
+tar -tf filename.tar.gz
+____________________
+zip:
+Создание архива файла:
+zip archive.zip filename
+
+Создание архива из папки:
+zip –r archive.zip dirname
+
+Распаковка архива:
+unzip archivename.zip
+unzip –d dirname archivename.zip
+____________________
+rar:
+Распаковка:
+unrar filename.rar
+
+Посмотреть список файлов без распаковки:
+unrar –t filename.rar
+
+
+gzip -d <имя_файла>.gz
+
