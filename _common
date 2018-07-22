@@ -10,6 +10,9 @@ tar:
 Создание архива без сжатия:
 tar -cf filename.tar file1 file2 fileN
 
+Добавление файла в архив:
+tar -rf filename.tar file4
+
 Создание архива с сжатием:
 tar -cvzf filename.tar.gz dir_name
 
