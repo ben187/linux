@@ -40,4 +40,6 @@ unrar –t filename.rar
 
 
 gzip -d <имя_файла>.gz
-
+____________________
+cat site.access.log | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'  |  sort -n | uniq -c
+cat site.access.log | grep -o '[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'  |  uniq -c | sort -nr
