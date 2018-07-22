@@ -16,4 +16,6 @@ netstat -plunt
 memcached-tool 127.0.0.1:11211 stats
 ps aux | grep memcached
 
+systemctl enable memcached
+
 https://www.8host.com/blog/ustanovka-i-zashhita-memcached-v-centos-7/
