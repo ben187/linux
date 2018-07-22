@@ -1,0 +1,8 @@
+чистка кэша isp:
+rm -rf /usr/local/mgr5/var/.xmlcache/
+killall core
+
+find etc/ -depth -name *.db
+
+sqlite3 /usr/local/mgr5/etc/ispmgr.db
+select * from domain where name="gogambling.com.ua";
