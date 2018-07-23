@@ -12,6 +12,7 @@ CREATE DATABASE wordpress;
 CREATE USER 'newuser'@'localhost' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON wordpress.* TO wordpressuser@localhost IDENTIFIED BY 'password';
 FLUSH PRIVILEGES;
+https://www.digitalocean.com/community/tutorials/mysql-ru
 
 Устанавливаем PHP-FPM:
 yum install -y php-fpm php-cli php-mysql php-gd php-ldap php-odbc php-pdo php-pecl-memcache php-pear php-xml php-xmlrpc php-mbstring php-snmp php-soap
