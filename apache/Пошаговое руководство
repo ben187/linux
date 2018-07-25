@@ -1,0 +1,6 @@
+1. yum install httpd
+2. yum install -y php
+3. yum install -y php-mysql php-mbstring php-mcrypt php-devel php-xml php-gd
+4. yum install -y mariadb mariadb-server
+5. systemctl enable mariadb.service
+6. mysqladmin -u root password password
