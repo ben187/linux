@@ -44,6 +44,7 @@ unrar filename.rar
 unrar –t filename.rar
 ____________________
 cp -r dir1/. dir2
+cp /test1/{*,.*} /test2/
 ____________________
 
 gzip -d <имя_файла>.gz
