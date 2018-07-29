@@ -5,6 +5,8 @@ mysql ИМЯ_БАЗЫ -uИМЯ_ПОЛЬЗОВАТЕЛЯ -pПАРОЛЬ < dump.sq
 mysql -uИМЯ_ПОЛЬЗОВАТЕЛЯ -pПАРОЛЬ
 use ИМЯ_БАЗЫ;
 \. /путь/к/dump.sql
+
+sed -i 's/utf8mb4_unicode_520_ci/utf8mb4_unicode_ci/g' file.sql
 ____________________
 tar:
 Создание архива без сжатия:
