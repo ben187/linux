@@ -1,3 +1,4 @@
+yum install memcached
 /etc/sysconfig/memcached
 
 PORT="11211"
