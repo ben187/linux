@@ -1,0 +1,14 @@
+yum install php-pecl-zendopcache
+vi /etc/php.d/opcache.ini
+
+opcache.revalidate_freq=0
+opcache.validate_timestamps=0 
+opcache.max_accelerated_files=20000 
+opcache.memory_consumption=128 
+opcache.interned_strings_buffer=16
+opcache.fast_shutdown=1
+
+systemctl restart httpd
+systemctl restart php-fpm.service
+
+https://tradenark.com.ua/centos/setup-zendopcache-on-centos-7/
