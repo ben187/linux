@@ -1,0 +1,3 @@
+/etc/yum.repos.d/*.repo
+
+yum repolist -v
