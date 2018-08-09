@@ -3,6 +3,7 @@ rsync -avz documents/ root@192.168.0.101:/home/
 С удаленного в локальную:
 rsync -avz root@192.168.0.101:/home/ documents/ 
 
+rsync -av -e 'ssh -p 3333' root@192.168.0.101:/var/www /var/
 
 .
 wget -r -l 30 ftp://user:password@127.0.0.1/test
