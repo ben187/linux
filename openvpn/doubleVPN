@@ -1,0 +1,152 @@
+client > server1 > server2 > internet
+
+================
+server1:
+/etc/openvpn/server.conf
+
+port 1194
+local 1.1.1.1
+proto tcp
+dev tun1
+server 10.0.1.0 255.255.255.0
+ca /etc/openvpn/ca.crt
+cert /etc/openvpn/server.crt
+key /etc/openvpn/server.key
+dh /etc/openvpn/dh.pem
+#tls-auth /etc/openvpn/keys/tls.key 0
+#cipher AES-256-CBC
+user nobody
+group nobody
+status /var/log/openvpn/openvpnserver-status.log
+log-append /var/log/openvpn/openvpnserver.log
+verb 3
+max-clients 30
+keepalive 10 120
+#tls-server
+comp-lzo
+persist-key
+persist-tun
+fast-io
+push "explicit-exit-notify"
+
+push "route 10.0.1.0 255.255.255.0"
+push "redirect-gateway def1"
+push "dhcp-option DNS 8.8.8.8"
+========================
+server1:
+/etc/openvpn/client.conf
+
+remote 2.2.2.2 1195 udp
+client
+
+explicit-exit-notify
+
+dev tun0
+
+proto udp
+
+persist-key
+persist-tun
+resolv-retry infinite
+nobind
+
+verb 3
+cipher AES-256-CBC
+
+user root
+group root
+tls-client
+ifconfig 10.0.2.2 10.0.2.1
+
+proto tcp-client
+
+ca /etc/openvpn/s2s/ca.crt
+cert /etc/openvpn/s2s/client.crt
+key /etc/openvpn/s2s/client.key
+
+
+status /var/log/openvpn/openvpn-status.log
+log-append /var/log/openvpn/openvpn.log
+
+#script-security 2
+#up "route.sh"
+==================
+server1:
+
+ip route add default via 10.0.2.1 table 3
+ip rule add from 10.0.1.0/24 lookup 3
+
+-A POSTROUTING -s 10.0.1.0/24 -o tun0 -j MASQUERADE
+
+==================
+
+server2:
+/etc/openvpn/server.conf
+
+local 2.2.2.2
+port 1195
+
+dev tun
+proto udp
+tls-server
+
+ca /etc/openvpn/ca.crt
+cert /etc/openvpn/server.crt
+key /etc/openvpn/server.key
+dh /etc/openvpn/dh.pem
+ecdh-curve secp384r1
+
+ifconfig 10.0.2.1 10.0.2.2
+
+keepalive 10 60
+persist-key
+persist-tun
+
+status /var/log/openvpn/openvpn-status.log
+log-append /var/log/openvpn/openvpn.log
+verb 3
+
+push "route 10.0.2.0 255.255.255.0"
+route 10.0.1.0 255.255.255.0
+
+
+ncp-disable
+cipher AES-256-CBC
+txqueuelen 300
+sndbuf 393216
+rcvbuf 393216
+
+fast-io
+push "explicit-exit-notify"
+================
+server2
+-A POSTROUTING -s 10.0.1.0/24 -o eth0 -j SNAT --to-source 194.87.92.154
+
+=====================
+
+client.conf
+
+client
+remote 1.1.1.1 1194
+proto tcp
+dev tun
+ca /home/john/ca.crt
+dh /home/john/dh.pem
+cert /home/john/client.crt
+key /home/john/client.key
+#tls-auth tls.key 1
+#cipher AES-256-CBC
+verb 3
+mute 20
+keepalive 10 120
+comp-lzo
+persist-key
+persist-tun
+resolv-retry infinite
+nobind
+
+
+
+
+
+
