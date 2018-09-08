@@ -41,7 +41,7 @@ nameserver 8.8.8.8"> /etc/resolv.conf
         fi
 
 if [[ "$CONFIG_IPFORWARD" = [yY] ]] ; then
-        sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
+        echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf 
         fi
 
 if [[ "$CONFIG_IPTABLES" = [yY] ]] ; then
