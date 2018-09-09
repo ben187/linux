@@ -13,6 +13,7 @@ CONFIG_IPFORWARD=y
 CONFIG_IPTABLES=y
 CONFIG_SELINUX=y
 
+INSTALL_LSOF=y
 INSTALL_HTOP=y
 INSTALL_NMAP=y
 INSTALL_NETUTILS=y
@@ -80,6 +81,9 @@ if [[ "$CONFIG_SELINUX" = [yY] ]] ; then
         sed -i "s/SELINUX=enforcing/SELINUX=disabled/" /etc/selinux/config
         fi
 
+if [[ "$INSTALL_LSOF" = [yY] ]] ; then
+        yum -y install lsof
+        fi
 
 if [[ "$INSTALL_HTOP" = [yY] ]] ; then
         yum -y install htop
