@@ -1,8 +1,8 @@
-<?php echo exec('whoami'); ?>
-
 <?php phpinfo(); ?>
+echo '<?php phpinfo(); ?>' > info.php
 
-<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-?>
+<?php echo exec('whoami'); ?>
+echo '<?php echo exec('whoami'); ?>' > who.php
+
+<?php error_reporting(E_ALL); ini_set('display_errors', 1); ?>
+echo '<?php error_reporting(E_ALL); ini_set('display_errors', 1); ?>' > error.php
