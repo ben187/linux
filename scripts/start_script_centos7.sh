@@ -55,7 +55,7 @@ if [[ "$CONFIG_IPTABLES" = [yY] ]] ; then
 if [[ "$CONFIG_BASHRC" = [yY] ]]; then
         cp /root/.bashrc /root/.bashrc.backup
         cat >> /root/.bashrc <<EOF
-PS1='\[\e[1;30m\]\t \e[m\]\e[1;34m[\u@\h]\e[m\] \[\e[1;97m\]\W\e[m\] \n\$ '
+PS1="\[$(tput bold)\]\[$(tput setaf 4)\]\t\[$(tput setaf 7)\][\[$(tput setaf 7)\]@\[$(tput setaf 3)\]\h \[$(tput setaf 7)\]\W\[$(tput setaf 7)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
 EOF
 fi
 if [[ "$INSTALL_HTOP" = [yY] ]] ; then
