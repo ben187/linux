@@ -1,6 +1,15 @@
 #!/bin/bash
 # Author: ben187
 
+#CONFIG_IPFORWARD=y
+#CONFIG_SELINUX=y
+#CONFIG_BASHRC=y
+
+#INSTALL_IPTABLES=y
+#INSTALL_UTILS=y
+
+#REBOOT=y
+
 echo "Wellcome to start config script for Centos7. Please wait..."
 yum install -y epel-release &> /dev/null
 
@@ -54,11 +63,11 @@ echo "Install iptables, are you sure?"
 	
 if [[ "$INSTALL_IPTABLES" = [yY] ]] ;
 then
-	systemctl stop firewalld
-	systemctl disable firewalld
-	yum -y install iptables-services
-	systemctl enable iptables.service
-	systemctl restart iptables.service
+	systemctl stop firewalld &> /dev/null
+	systemctl disable firewalld &> /dev/null
+	yum -y install iptables-services &> /dev/null
+	systemctl enable iptables.service &> /dev/null
+	systemctl restart iptables.service &> /dev/null
   	fi
 
 echo "Config simple iptables rules, are you sure?"
@@ -87,7 +96,7 @@ then
 -A FORWARD -j REJECT --reject-with icmp-host-prohibited
 COMMIT
 EOF
-	systemctl restart iptables.service
+	systemctl restart iptables.service &> /dev/null
 	fi
 
 echo "Config bashrc, are you sure?"
