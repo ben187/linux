@@ -1,15 +1,6 @@
 #!/bin/bash
 # Author: ben187
 
-#CONFIG_IPFORWARD=y
-#CONFIG_SELINUX=y
-#CONFIG_BASHRC=y
-
-#INSTALL_IPTABLES=y
-#INSTALL_UTILS=y
-
-#REBOOT=y
-
 echo "Wellcome to start config script for Centos7. Please wait..."
 yum install -y epel-release &> /dev/null
 
