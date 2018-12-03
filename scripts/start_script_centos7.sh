@@ -2,7 +2,20 @@
 # Author: ben187
 
 echo "Wellcome to start config script for Centos7. Please wait..."
-yum install -y epel-release &> /dev/null
+
+if test  -e /etc/yum.repos.d/epel.repo;
+then
+	echo "Epel is already installed";
+else
+	echo "Epel will be installed...";
+	rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm &> /dev/null
+	if [ `echo $?` -eq 0 ];
+	then
+		echo "Epel installed";
+	else
+		echo "Errors occurred while installing"
+	fi	
+fi
 
 echo "Enable ip forward, are you sure?"
     read REPLY
@@ -123,8 +136,15 @@ then
 	yum -y install htop nmap net-tools wget bind-utils tree &> /dev/null
 	fi
 
-echo "Yum update, please wait..."
-yum update -y &> /dev/null
+echo "Yum update, are you sure?"
+    read REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+		yum update -y &> /dev/null
+	else	
+        echo "Yum update cancelled"
+	fi
 
 echo "Reboot system now, are you sure?"
     read REPLY
