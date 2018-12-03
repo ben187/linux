@@ -151,8 +151,8 @@ echo "Reboot system now, are you sure?"
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
-		REBOOT=y
 		echo "Script completed successfully, system sent to reboot" 
+		reboot
 	else	
         echo "Script completed successfully"
 	fi 
