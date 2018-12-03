@@ -1,93 +1,138 @@
 #!/bin/bash
 # Author: ben187
 
-SECURE_SSHD=y
-SSHD_PORT=10022
-SSHD_USERS='root'
-SSHD_ROOT_LOGIN=y
+echo "Wellcome to start config script for Centos7. Please wait..."
+yum install -y epel-release &> /dev/null
 
-CONFIG_DNS=y
-CONFIG_IPTABLES=y
-CONFIG_IPFORWARD=y
-CONFIG_BASHRC=y
-
-INSTALL_HTOP=y
-INSTALL_NMAP=y
-INSTALL_NETUTILS=y
-INSTALL_WGET=y
-INSTALL_GIT=y
-INSTALL_MAN_PAGES=y
-REBOOT=y
-
-yum install -y epel-release
-yum -y update
-
-if [[ "$SECURE_SSHD" = [yY] ]]; then
-        cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
-        cat >> /etc/ssh/sshd_config <<EOF
-Port $SSHD_PORT
-AllowUsers $SSHD_USERS
-EOF
+echo "Enable ip forward, are you sure?"
+    read REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+		CONFIG_IPFORWARD=y
+	else	
+        echo "Config ipforward cancelled"
+	fi
+	
+if [[ "$CONFIG_IPFORWARD" = [yY] ]] ; 
+then
+	if grep -q "net.ipv4.ip_forward" /etc/sysctl.conf;
+	then	
+		sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
+	else
+		echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+	fi
 fi
-
-if [[ "$SSHD_ROOT_LOGIN" = [nN] ]]; then
-        sed -i 's/PermitRootLogin yes/#PermitRootLogin yes/' /etc/ssh/sshd_config
-        fi
-
-if [[ "$CONFIG_DNS" = [yY] ]] ; then
-        echo "nameserver 8.8.4.4
-nameserver 8.8.8.8"> /etc/resolv.conf
-        fi
-
-if [[ "$CONFIG_IPFORWARD" = [yY] ]] ; then
-        sed -i 's/net.ipv4.ip_forward = 0/net.ipv4.ip_forward = 1/' /etc/sysctl.conf
-        fi
-
-if [[ "$CONFIG_IPTABLES" = [yY] ]] ; then
+echo "Disable SELinix, are you sure?"
+    read REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+		CONFIG_SELINUX=y
+	else	
+        echo "Disable SELinix cancelled"
+	fi
+	
+if [[ "$CONFIG_SELINUX" = [yY] ]] ; 
+then
+	if grep -q "SELINUX=enforcing" /etc/selinux/config;
+	then	
+		sed -i 's/SELINUX=enforcing/SELINUX=disables/' /etc/selinux/config
+	else
+		echo "SELINUX=disables" >> /etc/selinux/config
+		fi
+	fi
+echo "Install iptables, are you sure?"
+    read REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+		INSTALL_IPTABLES=y
+	else	
+        echo "Install iptables cancelled"
+	fi
+	
+if [[ "$INSTALL_IPTABLES" = [yY] ]] ;
+then
 	systemctl stop firewalld
 	systemctl disable firewalld
 	yum -y install iptables-services
 	systemctl enable iptables.service
-	systemctl start iptables.service
-  > /etc/sysconfig/iptables
-  cat /iptables > /etc/sysconfig/iptables
+	systemctl restart iptables.service
+  	fi
+
+echo "Config simple iptables rules, are you sure?"
+    read REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+		CONFIG_IPTABLES=y
+	else	
+        echo "Config iptables cancelled"
 	fi
-if [[ "$CONFIG_BASHRC" = [yY] ]]; then
-        cp /root/.bashrc /root/.bashrc.backup
-        cat >> /root/.bashrc <<EOF
+
+if [[ "$CONFIG_IPTABLES" = [yY] ]];
+then
+	cp /etc/sysconfig/iptables /etc/sysconfig/iptables.backup
+	cat > /etc/sysconfig/iptables <<EOF
+*filter
+:INPUT DROP [0:0]
+:FORWARD DROP [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+#-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+EOF
+	systemctl restart iptables.service
+	fi
+
+echo "Config bashrc, are you sure?"
+    read REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+		CONFIG_BASHRC=y
+	else	
+        echo "Config bashrc cancelled"
+	fi
+
+if [[ "$CONFIG_BASHRC" = [yY] ]];
+then
+	cp /root/.bashrc /root/.bashrc.backup
+	cat >> /root/.bashrc <<EOF
 PS1="\[$(tput bold)\]\[$(tput setaf 4)\]\t\[$(tput setaf 7)\][\[$(tput setaf 7)\]@\[$(tput setaf 3)\]\h \[$(tput setaf 7)\]\W\[$(tput setaf 7)\]]\[$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
 EOF
-fi
-if [[ "$INSTALL_HTOP" = [yY] ]] ; then
-        yum -y install htop
-        fi
+	fi
 
-if [[ "$INSTALL_NMAP" = [yY] ]] ; then
-        yum -y install nmap
-        fi
+echo "Install utils and programms, are you sure?"
+    read REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+		INSTALL_UTILS=y
+	else	
+        echo "Install utils cancelled"
+	fi
 
-if [[ "$NET_TOOLS" = [yY] ]] ; then
-        yum -y install net-tools
-        fi
+if [[ "$INSTALL_UTILS" = [yY] ]] ;
+then
+	yum -y install htop nmap net-tools wget bind-utils tree &> /dev/null
+	fi
 
-if [[ "$INSTALL_WGET" = [yY] ]] ; then
-        yum -y install wget
-        fi
-if [[ "$INSTALL_GIT" = [yY] ]] ; then
-        yum -y install git
-        fi
-if [[ "$INSTALL_MAN_PAGES" = [yY] ]] ; then
-        yum -y install man
-        fi        
+echo "Yum update, please wait..."
+yum update -y &> /dev/null
 
-if [[ "$SECURE_SSHD" = [yY] ]]; then
-        service sshd restart
-fi
-
-if [[ "$CONFIG_IPTABLES" = [yY] ]]; then
-        service iptables restart
-        fi
- 
-if [[ "$REBOOT" = [yY] ]] ; then
-        shutdown -r now
-        fi
+echo "Reboot system now, are you sure?"
+    read REPLY
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+		REBOOT=y
+		echo "Script completed successfully, system sent to reboot" 
+	else	
+        echo "Script completed successfully"
+	fi 
