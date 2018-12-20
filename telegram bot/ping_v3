@@ -1,0 +1,36 @@
+#!/bin/bash
+# Author: ben187
+
+TOKEN=1
+CHAT_ID=1
+URL=https://api.telegram.org/bot$TOKEN/sendMessage
+
+STATUS=1;
+TEXT='test host'
+IP='192.168.0.100'
+
+if [[ $STATUS -eq 0 ]];
+then
+        if ping -c 3 -s 5 -W 5 $IP | grep ttl > /dev/null;
+        then
+                curl -i -s -X GET $URL -d text="$TEXT is again up" -d chat_id=$CHAT_ID
+                STATUS=1
+                sed -i '8s/STATUS=0;/STATUS=1;/' /root/s
+        else
+        > /dev/null
+        fi
+        else
+        > /dev/null
+fi
+
+if [[ $STATUS -eq 1 ]];
+then
+        if ping -c 3 -s 5 -W 5 $IP | grep ttl > /dev/null;
+        then
+        STATUS=1
+        else
+                curl -i -s -X GET $URL -d text="$TEXT is down" -d chat_id=$CHAT_ID
+                STATUS=0
+                sed -i '8s/STATUS=1;/STATUS=0;/' s
+        fi
+fi
