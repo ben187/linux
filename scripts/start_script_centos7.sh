@@ -50,7 +50,7 @@ if [[ "$CONFIG_SELINUX" = [yY] ]] ;
 then
 	if grep -q "SELINUX=enforcing" /etc/selinux/config;
 	then	
-		sed -i 's/SELINUX=enforcing/SELINUX=disables/' /etc/selinux/config
+		sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 	else
 		echo "SELINUX=disables" >> /etc/selinux/config
 		fi
