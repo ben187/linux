@@ -1,0 +1,52 @@
+provider "aws" {
+  region                  = "us-east-1"
+}
+
+resource "aws_subnet" "main" {
+  vpc_id     = "vpc-0b78e3f8d783cae68"
+  cidr_block = "10.0.100.0/24"
+  availability_zone = "us-east-1a"
+
+}
+
+resource "aws_subnet" "main1" {
+  vpc_id     = "vpc-0b78e3f8d783cae68"
+  cidr_block = "10.0.101.0/24"
+  availability_zone = "us-east-1b"
+
+}
+
+resource "aws_elasticache_subnet_group" "testsubnet" {
+  name       = "testsubnet"
+  subnet_ids = ["${aws_subnet.main.id}", "${aws_subnet.main1.id}"]
+}
+
+resource "aws_security_group" "testsg" {
+  name        = "testsg"
+  description = "Allow 6379"
+  vpc_id      = "vpc-0b78e3f8d783cae68"
+
+  ingress {
+    description = "Allow 6379"
+    from_port   = 6379
+    to_port     = 6379
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]
+  }
+
+}
+
+resource "aws_elasticache_cluster" "test" {
+  cluster_id           = "cluster-test"
+  engine               = "redis"
+  node_type            = "cache.t2.micro"
+  num_cache_nodes      = 1
+  parameter_group_name = "default.redis5.0"
+  engine_version       = "5.0.6"
+  port                 = 6379
+  subnet_group_name    = "testsubnet"
+#  availability_zone    = ["us-east-1a", "us-east-1b
+  security_group_ids   = ["${aws_security_group.testsg.id}"]  
+  replication_group_id = "${aws_elasticache_replication_group.example.id}"
+}
+
